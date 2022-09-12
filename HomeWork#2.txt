@@ -1,0 +1,117 @@
+%%%%%%%%%%%%%%%%%Problem 1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+MariaDB [toyu2]> Select stuId,fname,lname,major,minor,advisor From Student Where Major = 'CSCI' OR Minor = 'CSCI';
++--------+-------+-------+-------+-------+---------+
+| stuId  | fname | lname | major | minor | advisor |
++--------+-------+-------+-------+-------+---------+
+| 100000 | Tony  | Hawk  | CSCI  | CINF  |    1011 |
+| 100001 | Mary  | Hawk  | CSCI  | CINF  |    1011 |
+| 100002 | David | Hawk  | CSCI  | ITEC  |    1012 |
+| 100009 | Linda | King  | ARTS  | CSCI  |    1018 |
++--------+-------+-------+-------+-------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [toyu2]> notee %%%%%%%Problem 2%%%%%%%%%%%
+MariaDB [toyu2]> Select s.stuid, s.fname, s.lname, d.deptname as Major, Enroll.grade AS 'Class 10003 grade'
+    -> From Student AS s inner join Department as d on (s.major = d.deptCode) inner join Enroll ON(s.stuid = Enroll.stuid)
+    -> where Enroll.classid = '10003';
++--------+-------+---------+------------------------------+-------------------+
+| stuid  | fname | lname   | Major                        | Class 10003 grade |
++--------+-------+---------+------------------------------+-------------------+
+| 100000 | Tony  | Hawk    | Computer Science             | C                 |
+| 100002 | David | Hawk    | Computer Science             | D                 |
+| 100004 | Larry | Johnson | Information Technology       | A                 |
+| 100005 | Linda | Johnson | Computer Information Systems | NULL              |
++--------+-------+---------+------------------------------+-------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [toyu2]> 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Problem 3%%%%%%%%%%%%%%%
+MariaDB [toyu2]> select s.stuid, CONCAT(s.fname, ' ' , s.lname) as student, d.deptname as Major, 
+    -> CONCAT(f.fname, " ", f.lname) as advisor, d.deptname as 'Advisor Department'
+    -> From Student AS s inner join Department as d on (s.major = d.deptCode) inner join Faculty as f ON (f.facid = s.advisor)
+    -> where s.minor = "ITEC";
++--------+-----------------+------------------------------+-------------+------------------------------+
+| stuid  | student         | Major                        | advisor     | Advisor Department           |
++--------+-----------------+------------------------------+-------------+------------------------------+
+| 100002 | David Hawk      | Computer Science             | Mary Tran   | Computer Science             |
+| 100006 | Lillian Johnson | Computer Information Systems | Andrew Byre | Computer Information Systems |
++--------+-----------------+------------------------------+-------------+------------------------------+
+2 rows in set (0.002 sec)
+
+MariaDB [toyu2]> notee
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Problem 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MariaDB [toyu2]> notee;
+MariaDB [toyu2]> SELECT s.stuid,s.fname,s.lname,s.major,e.classid, co.title as course, e.grade as grade
+    -> From (Course as co inner join Class as cl on (co.courseid = cl.courseid))
+    -> INNER JOIN (Student as s inner join Enroll as e on (s.stuid = e.stuid)) on (cl.classid = e.classid)
+    -> WHERE s.major = "CSCI" or s.major = "ITEC" or s.major = "CINF"
+    -> ORDER BY s.major DESC;
++--------+---------+---------+-------+---------+-------------------------------------+-------+
+| stuid  | fname   | lname   | major | classid | course                              | grade |
++--------+---------+---------+-------+---------+-------------------------------------+-------+
+| 100004 | Larry   | Johnson | ITEC  |   10003 | Introduction to Information Systems | A     |
+| 100004 | Larry   | Johnson | ITEC  |   10004 | Web Application Development         | B+    |
+| 100000 | Tony    | Hawk    | CSCI  |   10000 | Data Structures                     | A     |
+| 100000 | Tony    | Hawk    | CSCI  |   10001 | Design of Database Systems          | A     |
+| 100000 | Tony    | Hawk    | CSCI  |   10002 | DBMS                                | B+    |
+| 100000 | Tony    | Hawk    | CSCI  |   10003 | Introduction to Information Systems | C     |
+| 100000 | Tony    | Hawk    | CSCI  |   10004 | Web Application Development         | A-    |
+| 100000 | Tony    | Hawk    | CSCI  |   11001 | Design of Database Systems          | D     |
+| 100001 | Mary    | Hawk    | CSCI  |   10000 | Data Structures                     | NULL  |
+| 100001 | Mary    | Hawk    | CSCI  |   10001 | Design of Database Systems          | A-    |
+| 100002 | David   | Hawk    | CSCI  |   10000 | Data Structures                     | B-    |
+| 100002 | David   | Hawk    | CSCI  |   10002 | DBMS                                | B+    |
+| 100002 | David   | Hawk    | CSCI  |   10003 | Introduction to Information Systems | D     |
+| 100005 | Linda   | Johnson | CINF  |   10003 | Introduction to Information Systems | NULL  |
+| 100005 | Linda   | Johnson | CINF  |   10004 | Web Application Development         | A-    |
+| 100005 | Linda   | Johnson | CINF  |   10005 | Database Development                | A-    |
+| 100005 | Linda   | Johnson | CINF  |   10006 | Introduction to Scripting           | B+    |
+| 100006 | Lillian | Johnson | CINF  |   10004 | Web Application Development         | C+    |
+| 100006 | Lillian | Johnson | CINF  |   10005 | Database Development                | A     |
++--------+---------+---------+-------+---------+-------------------------------------+-------+
+19 rows in set (0.002 sec)
+
+MariaDB [toyu2]> detee
+    -> ;
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Problem 5%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'detee' at line 1
+MariaDB [toyu2]> notee;
+MariaDB [toyu2]> SELECT s.stuid,s.fname,s.lname,s.major,e.classid, f.deptcode as "Instructor Deptcode", co.title as course, e.grade as grade
+    -> From (Course as co inner join Class as cl on (co.courseid = cl.courseid))
+    -> INNER JOIN (Student as s inner join Enroll as e on (s.stuid = e.stuid)) on (cl.classid = e.classid) 
+    -> Inner Join Faculty as f on (f.facId = cl.facId) 
+    -> WHERE s.major = "CSCI" or s.major = "ITEC" or s.major = "CINF"
+    -> ORDER BY s.major DESC;
++--------+---------+---------+-------+---------+---------------------+-------------------------------------+-------+
+| stuid  | fname   | lname   | major | classid | Instructor Deptcode | course                              | grade |
++--------+---------+---------+-------+---------+---------------------+-------------------------------------+-------+
+| 100004 | Larry   | Johnson | ITEC  |   10003 | CSCI                | Introduction to Information Systems | A     |
+| 100004 | Larry   | Johnson | ITEC  |   10004 | CSCI                | Web Application Development         | B+    |
+| 100000 | Tony    | Hawk    | CSCI  |   10000 | CSCI                | Data Structures                     | A     |
+| 100000 | Tony    | Hawk    | CSCI  |   10001 | CSCI                | Design of Database Systems          | A     |
+| 100000 | Tony    | Hawk    | CSCI  |   10002 | CSCI                | DBMS                                | B+    |
+| 100000 | Tony    | Hawk    | CSCI  |   10003 | CSCI                | Introduction to Information Systems | C     |
+| 100000 | Tony    | Hawk    | CSCI  |   10004 | CSCI                | Web Application Development         | A-    |
+| 100000 | Tony    | Hawk    | CSCI  |   11001 | CSCI                | Design of Database Systems          | D     |
+| 100001 | Mary    | Hawk    | CSCI  |   10000 | CSCI                | Data Structures                     | NULL  |
+| 100001 | Mary    | Hawk    | CSCI  |   10001 | CSCI                | Design of Database Systems          | A-    |
+| 100002 | David   | Hawk    | CSCI  |   10000 | CSCI                | Data Structures                     | B-    |
+| 100002 | David   | Hawk    | CSCI  |   10002 | CSCI                | DBMS                                | B+    |
+| 100002 | David   | Hawk    | CSCI  |   10003 | CSCI                | Introduction to Information Systems | D     |
+| 100005 | Linda   | Johnson | CINF  |   10003 | CSCI                | Introduction to Information Systems | NULL  |
+| 100005 | Linda   | Johnson | CINF  |   10004 | CSCI                | Web Application Development         | A-    |
+| 100005 | Linda   | Johnson | CINF  |   10005 | CINF                | Database Development                | A-    |
+| 100005 | Linda   | Johnson | CINF  |   10006 | ITEC                | Introduction to Scripting           | B+    |
+| 100006 | Lillian | Johnson | CINF  |   10004 | CSCI                | Web Application Development         | C+    |
+| 100006 | Lillian | Johnson | CINF  |   10005 | CINF                | Database Development                | A     |
++--------+---------+---------+-------+---------+---------------------+-------------------------------------+-------+
+19 rows in set (0.001 sec)
+
+MariaDB [toyu2]> notee
+
